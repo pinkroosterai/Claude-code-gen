@@ -9,7 +9,9 @@
 [![Claude Code](https://img.shields.io/badge/Claude-Code-blue.svg)](https://claude.ai/code)
 [![Documentation](https://img.shields.io/badge/docs-comprehensive-green.svg)](#-documentation)
 
-*The repository that exists so Claude can dream of electric sheep that help Claude dream better dreams—a delicious ouroboros of AI self-improvement. Wake up, Neo—the matrix is written in Markdown and it wants to optimize your git workflow.*
+*The repository that exists so Claude can dream of electric sheep that help Claude dream better dreams—a delicious ouroboros of AI self-improvement.*
+
+> Wake up, Neo—the matrix is written in Markdown and it wants to optimize your git workflow.
 
 </div>
 
