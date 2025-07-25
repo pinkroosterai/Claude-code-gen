@@ -11,7 +11,7 @@ argument-hint: <agent-name> [type] [description]
 
 ## Dynamic Path Resolution
 !`SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)`
-!`PROJECT_ROOT=$(cd "$SCRIPT_DIR/../../.." && pwd)`
+!`PROJECT_ROOT=$(pwd)`
 !`echo "Project root: $PROJECT_ROOT"`
 
 ## Current Agent Structure

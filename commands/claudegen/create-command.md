@@ -1,17 +1,17 @@
 ---
 description: Generate a new Claude Code slash command to automate workflows and extend Claude's capabilities
 allowed-tools: Bash(ls:*), Bash(mkdir:*), Bash(find:*), Bash(test:*), Bash(dirname:*), Bash(basename:*)
-argument-hint: <command-name> [category] [description]
+argument-hint: <command-name> [scope] [category] [description]
 ---
 
 # Claude Code Slash Command Generator
 
 ## Argument Validation
-!`if [ -z "$ARGUMENTS" ]; then echo "ERROR: Command name is required. Usage: /project:claudegen:create-command <command-name> [category] [description]"; exit 1; fi`
+!`if [ -z "$ARGUMENTS" ]; then echo "ERROR: Command name is required. Usage: /project:claudegen:create-command <command-name> [scope] [category] [description]"; exit 1; fi`
 
 ## Dynamic Path Resolution
 !`SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)`
-!`PROJECT_ROOT=$(cd "$SCRIPT_DIR/../../.." && pwd)`
+!`PROJECT_ROOT=$(pwd)`
 !`echo "Project root: $PROJECT_ROOT"`
 
 ## Current Command Structure
@@ -21,8 +21,10 @@ argument-hint: <command-name> [category] [description]
 !`find "$HOME/.claude/commands" -name "*.md" -type f 2>/dev/null | sort | head -10 || echo "No user commands found"`
 
 ## Existing Categories
-!`echo "=== Available command categories ==="`
-!`ls -1 "$PROJECT_ROOT/commands/" 2>/dev/null || echo "No command categories found"`
+!`echo "=== Project command categories ==="`
+!`ls -1 "$PROJECT_ROOT/commands/" 2>/dev/null || echo "No project command categories found"`
+!`echo "=== User command categories ==="`
+!`ls -1 "$HOME/.claude/commands/" 2>/dev/null || echo "No user command categories found"`
 
 ## Template Reference
 !`TEMPLATE_PATH="$PROJECT_ROOT/templates/command-template.md"`
@@ -35,10 +37,20 @@ Create a new slash command with the following specifications:
 
 **Command Name:** $ARGUMENTS
 **Parsed Arguments:**
-!`echo "$ARGUMENTS" | awk '{print "Name: " $1; if(NF>1) print "Category: " $2; if(NF>2) {$1=$2=""; print "Description:" $0}}'`
+!`echo "$ARGUMENTS" | awk '{print "Name: " $1; if(NF>1) print "Scope: " $2; if(NF>2) print "Category: " $3; if(NF>3) {$1=$2=$3=""; print "Description:" $0}}'`
 !`COMMAND_NAME=$(echo "$ARGUMENTS" | awk '{print $1}')`
+!`SCOPE=$(echo "$ARGUMENTS" | awk '{print $2}')`
+!`CATEGORY=$(echo "$ARGUMENTS" | awk '{print $3}')`
 !`if echo "$COMMAND_NAME" | grep -q '[^a-zA-Z0-9_-]'; then echo "WARNING: Command name contains special characters. Consider using only alphanumeric characters, hyphens, and underscores."; fi`
-**Target Directory:** Determine appropriate category based on command purpose
+## Command Storage Location Analysis
+!`echo "=== Scope Detection ==="`
+!`if [ "$SCOPE" = "project" ]; then echo "Explicitly requested: PROJECT scope"; TARGET_DIR="$PROJECT_ROOT/commands"; elif [ "$SCOPE" = "user" ]; then echo "Explicitly requested: USER scope"; TARGET_DIR="$HOME/.claude/commands"; else echo "Auto-detecting based on context..."; if [ -d "$PROJECT_ROOT/commands" ]; then echo "Found project commands directory - using PROJECT scope"; TARGET_DIR="$PROJECT_ROOT/commands"; else echo "No project commands directory - using USER scope"; TARGET_DIR="$HOME/.claude/commands"; fi; fi`
+!`echo "Target directory: $TARGET_DIR"`
+
+**Available Scopes:**
+- **project** - Create in `./commands/` (project-specific command)
+- **user** - Create in `~/.claude/commands/` (user-wide command)
+- Auto-detect if not specified based on current context
 **Requirements Analysis:** Analyze the command description to determine:
 
 ### Essential Components
@@ -80,9 +92,11 @@ Generate the complete command file following these patterns:
 
 ## Delivery Requirements
 
-1. **Analyze the request** and determine command category and requirements
+1. **Analyze the request** and determine command scope (project vs user), category, and requirements
 2. **Generate the complete command file** with proper YAML frontmatter
-3. **Create the file** in the appropriate category directory
+3. **Create the file** in the appropriate directory:
+   - Project commands: `./commands/[category]/[command-name].md`
+   - User commands: `~/.claude/commands/[category]/[command-name].md`
 4. **Provide usage instructions** showing how to invoke the new command
 5. **Suggest related commands** that might work well with this new command
 
