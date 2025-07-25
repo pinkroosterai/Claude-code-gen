@@ -1,13 +1,13 @@
 ---
 description: Generate a new Claude Code sub-agent configuration to extend Claude's capabilities with specialized expertise
 allowed-tools: Bash(ls:*), Bash(mkdir:*), Bash(find:*), Bash(test:*), Bash(dirname:*), Bash(basename:*)
-argument-hint: <agent-name> [type] [description]
+argument-hint: <agent-name> [--description="description"] [--tools="tool1,tool2"] [--location="project|user"]
 ---
 
 # Claude Code Sub-Agent Generator
 
 ## Argument Validation
-!`if [ -z "$ARGUMENTS" ]; then echo "ERROR: Agent name is required. Usage: /project:claudegen:create-agent <agent-name> [type] [description]"; exit 1; fi`
+!`if [ -z "$ARGUMENTS" ]; then echo "ERROR: Agent name is required. Usage: /project:claudegen:create-agent <agent-name> [--description=\"description\"] [--tools=\"tool1,tool2\"] [--location=\"project|user\"]"; exit 1; fi`
 
 ## Dynamic Path Resolution
 !`SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)`
@@ -32,9 +32,9 @@ argument-hint: <agent-name> [type] [description]
 
 Generate a new Claude Code sub-agent to extend Claude's capabilities with specialized expertise:
 
-**Agent Name:** $ARGUMENTS
+**Arguments:** $ARGUMENTS
 **Parsed Arguments:**
-!`echo "$ARGUMENTS" | awk '{print "Name: " $1; if(NF>1) print "Type: " $2; if(NF>2) {$1=$2=""; print "Description:" $0}}'`
+!`echo "$ARGUMENTS" | sed 's/--description=/\nDescription: /g; s/--tools=/\nTools: /g; s/--location=/\nLocation: /g' | sed 's/"//g' | head -10`
 **Target Location:** Determine if this should be a project or user agent
 **Requirements Analysis:** Analyze the agent description to determine:
 

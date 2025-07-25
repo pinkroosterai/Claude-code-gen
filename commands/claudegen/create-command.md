@@ -1,13 +1,13 @@
 ---
 description: Generate a new Claude Code slash command to automate workflows and extend Claude's capabilities
 allowed-tools: Bash(ls:*), Bash(mkdir:*), Bash(find:*), Bash(test:*), Bash(dirname:*), Bash(basename:*)
-argument-hint: <command-name> [scope] [category] [description]
+argument-hint: <command-name> [--scope=project|user] [--category=category] [--description="description"]
 ---
 
 # Claude Code Slash Command Generator
 
 ## Argument Validation
-!`if [ -z "$ARGUMENTS" ]; then echo "ERROR: Command name is required. Usage: /project:claudegen:create-command <command-name> [scope] [category] [description]"; exit 1; fi`
+!`if [ -z "$ARGUMENTS" ]; then echo "ERROR: Command name is required. Usage: /project:claudegen:create-command <command-name> [--scope=project|user] [--category=category] [--description=\"description\"]"; exit 1; fi`
 
 ## Dynamic Path Resolution
 !`SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)`
@@ -35,12 +35,12 @@ argument-hint: <command-name> [scope] [category] [description]
 
 Create a new slash command with the following specifications:
 
-**Command Name:** $ARGUMENTS
+**Arguments:** $ARGUMENTS
 **Parsed Arguments:**
-!`echo "$ARGUMENTS" | awk '{print "Name: " $1; if(NF>1) print "Scope: " $2; if(NF>2) print "Category: " $3; if(NF>3) {$1=$2=$3=""; print "Description:" $0}}'`
+!`echo "$ARGUMENTS" | sed 's/--scope=/\nScope: /g; s/--category=/\nCategory: /g; s/--description=/\nDescription: /g' | sed 's/"//g' | head -10`
 !`COMMAND_NAME=$(echo "$ARGUMENTS" | awk '{print $1}')`
-!`SCOPE=$(echo "$ARGUMENTS" | awk '{print $2}')`
-!`CATEGORY=$(echo "$ARGUMENTS" | awk '{print $3}')`
+!`SCOPE=$(echo "$ARGUMENTS" | grep -o 'scope=[^[:space:]]*' | cut -d= -f2 | tr -d '"')`
+!`CATEGORY=$(echo "$ARGUMENTS" | grep -o 'category=[^[:space:]]*' | cut -d= -f2 | tr -d '"')`
 !`if echo "$COMMAND_NAME" | grep -q '[^a-zA-Z0-9_-]'; then echo "WARNING: Command name contains special characters. Consider using only alphanumeric characters, hyphens, and underscores."; fi`
 ## Command Storage Location Analysis
 !`echo "=== Scope Detection ==="`

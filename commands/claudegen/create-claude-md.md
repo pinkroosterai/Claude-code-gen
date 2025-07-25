@@ -1,7 +1,7 @@
 ---
 description: Generate a new CLAUDE.md memory file to customize Claude Code's behavior and knowledge for your project
 allowed-tools: Bash(pwd:*), Bash(ls:*), Bash(find:*), Bash(git:*), Bash(head:*), Bash(test:*), Bash(dirname:*), Bash(basename:*)
-argument-hint: [type] [description]
+argument-hint: [--type=user|project|local] [--description="description"]
 ---
 
 # Claude Code Memory File Generator (CLAUDE.md)
@@ -40,7 +40,7 @@ Create a CLAUDE.md memory file with the following specifications:
 
 **Request:** $ARGUMENTS
 **Parsed Arguments:**
-!`if [ -n "$ARGUMENTS" ]; then echo "$ARGUMENTS" | awk '{print "Type: " $1; if(NF>1) {$1=""; print "Description:" $0}}'; else echo "No specific type requested - will determine based on context"; fi`
+!`if [ -n "$ARGUMENTS" ]; then echo "$ARGUMENTS" | sed 's/--type=/\nType: /g; s/--description=/\nDescription: /g' | sed 's/"//g' | head -5; else echo "No specific type requested - will determine based on context"; fi`
 **Analysis Required:**
 
 ### Memory Type Determination
