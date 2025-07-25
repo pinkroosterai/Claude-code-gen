@@ -33,7 +33,6 @@ argument-hint: <command-name> [--scope=project|user] [--category=category] [--de
 Create a new slash command with the following specifications:
 
 **Arguments:** $ARGUMENTS
-**Parsed Arguments:** $ARGUMENTS
 ## Command Storage Location Analysis
 !`echo "=== Scope Detection ==="`
 !`echo "Available target directories: $PROJECT_ROOT/commands and $HOME/.claude/commands"`
@@ -56,6 +55,7 @@ Create a new slash command with the following specifications:
 - **File References** - Which files should be included as context?
 - **Security Constraints** - What tool permissions are appropriate?
 - **Error Handling** - How should edge cases be managed?
+- **Arguments** - Do not parse $ ARGUMENTS
 
 ### Implementation Guidelines
 1. Use the command template structure as the foundation
