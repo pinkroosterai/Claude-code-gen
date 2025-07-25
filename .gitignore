@@ -1,0 +1,55 @@
+# Ignore everything by default
+*
+
+# Except for files that are currently in the repo
+!.claude/
+!.claude/agents
+!.claude/commands
+!.claude/docs
+!.claude/templates
+!.gitkeep
+!CLAUDE.md
+!LICENSE
+!README.md
+
+# Agents directory
+!agents/
+!agents/.gitkeep
+
+# Commands directory and its subdirectories
+!commands/
+!commands/.gitkeep
+!commands/claudegen/
+!commands/claudegen/.gitkeep
+!commands/claudegen/create-agent.md
+!commands/claudegen/create-claude-md.md
+!commands/claudegen/create-command.md
+!commands/code/
+!commands/code/.gitkeep
+!commands/design/
+!commands/design/.gitkeep
+!commands/plan/
+!commands/plan/.gitkeep
+!commands/research/
+!commands/research/.gitkeep
+!commands/workflow/
+!commands/workflow/.gitkeep
+
+# Docs directory
+!docs/
+!docs/.gitkeep
+!docs/claude-md-reference.md
+!docs/slash-commands-reference.md
+!docs/sub-agents-reference.md
+
+# Templates directory
+!templates/
+!templates/.gitkeep
+!templates/agent-template.md
+!templates/claude-module-template.md
+!templates/claude-project-template.md
+!templates/claude-template.md
+!templates/command-template.md
+
+# Don't ignore the .gitignore file itself
+!.gitignore
