@@ -6,9 +6,6 @@ argument-hint: <command-name> [--scope=project|user] [--category=category] [--de
 
 # Claude Code Slash Command Generator
 
-## Argument Validation
-!`if [ -z "$ARGUMENTS" ]; then echo "ERROR: Command name is required. Usage: /project:claudegen:create-command <command-name> [--scope=project|user] [--category=category] [--description=\"description\"]"; exit 1; fi`
-
 ## Dynamic Path Resolution
 !`SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)`
 !`PROJECT_ROOT=$(pwd)`
@@ -36,16 +33,10 @@ argument-hint: <command-name> [--scope=project|user] [--category=category] [--de
 Create a new slash command with the following specifications:
 
 **Arguments:** $ARGUMENTS
-**Parsed Arguments:**
-!`echo "$ARGUMENTS" | sed 's/--scope=/\nScope: /g; s/--category=/\nCategory: /g; s/--description=/\nDescription: /g' | sed 's/"//g' | head -10`
-!`COMMAND_NAME=$(echo "$ARGUMENTS" | awk '{print $1}')`
-!`SCOPE=$(echo "$ARGUMENTS" | grep -o 'scope=[^[:space:]]*' | cut -d= -f2 | tr -d '"')`
-!`CATEGORY=$(echo "$ARGUMENTS" | grep -o 'category=[^[:space:]]*' | cut -d= -f2 | tr -d '"')`
-!`if echo "$COMMAND_NAME" | grep -q '[^a-zA-Z0-9_-]'; then echo "WARNING: Command name contains special characters. Consider using only alphanumeric characters, hyphens, and underscores."; fi`
+**Parsed Arguments:** $ARGUMENTS
 ## Command Storage Location Analysis
 !`echo "=== Scope Detection ==="`
-!`if [ "$SCOPE" = "project" ]; then echo "Explicitly requested: PROJECT scope"; TARGET_DIR="$PROJECT_ROOT/commands"; elif [ "$SCOPE" = "user" ]; then echo "Explicitly requested: USER scope"; TARGET_DIR="$HOME/.claude/commands"; else echo "Auto-detecting based on context..."; if [ -d "$PROJECT_ROOT/commands" ]; then echo "Found project commands directory - using PROJECT scope"; TARGET_DIR="$PROJECT_ROOT/commands"; else echo "No project commands directory - using USER scope"; TARGET_DIR="$HOME/.claude/commands"; fi; fi`
-!`echo "Target directory: $TARGET_DIR"`
+!`echo "Available target directories: $PROJECT_ROOT/commands and $HOME/.claude/commands"`
 
 **Available Scopes:**
 - **project** - Create in `./commands/` (project-specific command)

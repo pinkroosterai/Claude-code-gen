@@ -6,9 +6,6 @@ argument-hint: <agent-name> [--description="description"] [--tools="tool1,tool2"
 
 # Claude Code Sub-Agent Generator
 
-## Argument Validation
-!`if [ -z "$ARGUMENTS" ]; then echo "ERROR: Agent name is required. Usage: /project:claudegen:create-agent <agent-name> [--description=\"description\"] [--tools=\"tool1,tool2\"] [--location=\"project|user\"]"; exit 1; fi`
-
 ## Dynamic Path Resolution
 !`SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)`
 !`PROJECT_ROOT=$(pwd)`
@@ -33,8 +30,7 @@ argument-hint: <agent-name> [--description="description"] [--tools="tool1,tool2"
 Generate a new Claude Code sub-agent to extend Claude's capabilities with specialized expertise:
 
 **Arguments:** $ARGUMENTS
-**Parsed Arguments:**
-!`echo "$ARGUMENTS" | sed 's/--description=/\nDescription: /g; s/--tools=/\nTools: /g; s/--location=/\nLocation: /g' | sed 's/"//g' | head -10`
+**Parsed Arguments:** $ARGUMENTS
 **Target Location:** Determine if this should be a project or user agent
 **Requirements Analysis:** Analyze the agent description to determine:
 

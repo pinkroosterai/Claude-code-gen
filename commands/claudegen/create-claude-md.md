@@ -39,8 +39,7 @@ argument-hint: [--type=user|project|local] [--description="description"]
 Create a CLAUDE.md memory file with the following specifications:
 
 **Request:** $ARGUMENTS
-**Parsed Arguments:**
-!`if [ -n "$ARGUMENTS" ]; then echo "$ARGUMENTS" | sed 's/--type=/\nType: /g; s/--description=/\nDescription: /g' | sed 's/"//g' | head -5; else echo "No specific type requested - will determine based on context"; fi`
+**Parsed Arguments:** $ARGUMENTS
 **Analysis Required:**
 
 ### Memory Type Determination
