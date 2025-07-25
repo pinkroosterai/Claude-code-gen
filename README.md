@@ -30,17 +30,63 @@ ClaudeGen enables Claude Code to help users create customized Claude Code config
 
 ## 🚀 Quick Start
 
-### For Users
-Simply ask Claude to create customizations for you:
+### Setup Instructions
+
+1. **Clone this repository:**
+   ```bash
+   git clone <repository-url>
+   cd claudegen
+   ```
+
+2. **Copy templates and documentation to your Claude Code directory:**
+   ```bash
+   # Create Claude Code directory if it doesn't exist
+   mkdir -p ~/.claude
+   
+   # Copy essential directories
+   cp -r docs ~/.claude/
+   cp -r templates ~/.claude/
+   cp -r commands ~/.claude/
+   ```
+
+3. **Enable Bash tool permissions:**
+   Create or update `~/.claude/settings.json`:
+   ```json
+   {
+     "permissions": {
+       "allow": [
+         "Bash"
+       ],
+       "deny": []
+     }
+   }
+   ```
+
+4. **Start using the generation commands:**
+   ```bash
+   # Generate a new CLAUDE.md memory file
+   /user:claudegen:create-claude-md project "Node.js API"
+   
+   # Create a custom slash command
+   /user:claudegen:create-command code-review code "Automated code review"
+   
+   # Generate a specialized sub-agent
+   /user:claudegen:create-agent security-reviewer security "Code security analysis"
+   ```
+
+### Usage Examples
+Once set up, simply ask Claude to create customizations for you:
 
 ```
 "Help me create a CLAUDE.md for my React TypeScript project"
-"Generate a slash command for code review workflows"
+"Generate a slash command for code review workflows"  
 "Create a debugging sub-agent for Python development"
 ```
 
-### For Claude
-Reference the templates in `templates/` and documentation in `docs/` to generate appropriate configurations based on user requirements.
+Or use the slash commands directly:
+- `/user:claudegen:create-claude-md` - Generate memory files
+- `/user:claudegen:create-command` - Create slash commands
+- `/user:claudegen:create-agent` - Generate sub-agents
 
 ---
 
